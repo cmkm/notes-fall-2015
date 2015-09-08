@@ -1,0 +1,60 @@
+CSCI 3341: Operating Systems
+============================
+
+2015.08.18
+----------
+Assignments:
+    1. thread
+    2. semaphore
+    3. pipe
+
+
+2015.08.20
+----------
+An *operating system* is a collection of programs and data which manages computer resources and supports the virtual characteristics of the computer.
+
+*Computer resource* - any hardware or software component of a computer.
+
+### Managing computer resources
+* Allocation / deallocation - resources allocated by OS as needed.
+* Controlling - OS ensures resources cannot be misused or abused. Also makes sure resource works properly. (An example of abuse: using all memory. An example of misuse: using parts of memory not meant to use.)
+* Facilitator - makes sure all needs of your program are provided.
+
+*Virtual characteristics* - properties imagined to exist but which in reality do not. (Ex: natural languages.)
+
+*Kernel* - nucleus portion of OS which must live in main memory while the machine is running.
+
+OS always has empty space in its section of memory for loading subsystems when requested.
+
+Kernel always occupies uppermost or lowermost part of main memory. Dedicated register knows where memory is available to user.
+
+*System programs* - a collection of programs which provide convenience for the user. Tools for delivering OS services. Ex: command interpreter.
+    * Application programs - word processors, DBMS, etc..
+    * Program development aids - text editors, debug aids, compilers..
+    * System utilities - copy, delete, sort, command interpreter
+
+A *command interpreter* is either a collection of utilities, or a program with such a collection at its disposal.
+
+### OS evolution
+1. Sign-up scheme - only one person could use computer at a time. Work finished either before, exactly at end time, or slightly after end time is up. Memory dump to debug. Environment had to be set up each time.
+2. Hiring operators - setup specialists to quicken environment setup. Reduced idle time. Time wasted shuffling software.
+3. Batch processing - reduced time spend shuffling software. All programs needing a certain compiler were run at the same time. Owner of program has to note the needs of the program for the operator. Caused communication gap; attempted to be solved by job control language, or JCL. Invented by IBM Corp., first characters always "//" and last also "//".
+4. JCL created
+5. Automatic job sequencing - first OS created ("resident monitor")
+    * Resident monitor consisted of four parts.
+        1. Interrupt and trap vectors - arrays containing addresses to memory locations. INterrupt is a signal used by a resource to get the OS's attention. Every one has an interrupt ID containing the start address of the piece of code tat must be executed to handle the interrupt. Ex: interrupt has ID #5 →  go to vector index 5 →  vector contents at this index contain the memory address to code to handle. Interrupts come from the hardware; traps come from software. (Traps like exceptions, which can be handled within program by developer.)
+        2. JCL interpreter
+        3. Device driver
+        4. Job sequencing
+
+### Terminology
+* *program* - written in a programming language. Static.
+* *process* - a program as soon as it is in main memory. A candidate for execution by CPU. Dynamic
+* *job* - general name for a program or a process.
+* *one machine cycle*  - fetch, decode, execute. When a process is in execution, the CPU's registers contain data related to the process. This s the process status. A process can be frozen,a nd the status wl be moved to a location known by the OS. It can later be moved back to resume exactlwhere the process left off. 
+* *another definition for OS* - event-driven software.
+
+
+2015.08.25
+----------
+
