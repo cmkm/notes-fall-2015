@@ -471,3 +471,162 @@ by kernel threads. Connects user threads to kernel threads. Each LWP has one or 
 First assignment was given out - program with pthreads. 2 weeks to finish. Hardcopy of results to be delivered on due date. 
 
 Demo day at end of semester, another hardcopy to be brought then to ensure no changes have been made. 
+
+2015.09.22
+==========
+
+Quiz #1 Review
+--------------
+13 bit, 10^-6 seconds per tick. 2^13 * 10^-6 is the answer.
+
+I/O handling - fence registers in system mode, for example. 
+
+System mode - task is executed by OS code. User mode - task is executed by user code. 
+
+Asynchronous cancellation - also know that OS cannot reallocate 100% of resources. 
+
+Message passing methods: stack, set of registers, or block of memory. 
+
+CPU Management
+--------------
+A *CPU management system* is a collection of routines that manage CPU use. 
+
+Why do we need it? Multiprogramming. CPU time needs to be managed. 
+
+How to compare? Higher throughput = better CPUMS.
+
+*Throughput* - amount of work CPU does in one unit of time.
+
+*CPU burst* - continuous amount of time CPU spends working on a process prior to any interruption. Process always starts & ends on a CPU burst.
+
+**Sequential CPU**
+
+A |===|- -|===|- -|===|
+    ^ 2 minutes
+
+B                          |===|- -|===|- -|===|
+                             ^ 2 minutes
+
+Total exec time: 4 minutes.
+
+**Multiprogramming system**
+
+A |===|- -|===|- -|===|
+    ^ 2 minutes
+
+B     |===|- -|===|- -|===|
+        ^ 2 minutes
+
+Total exec time: ~ 2.2 minutes.
+
+### Performance criteria for CPU
+* CPU utilization.
+* Throughput.
+
+Increasing these two is the goal of a CPUMS.
+
+* Turnaround time. 
+
+T1 = time job submitted.
+T2 = time last bit of results completely out of system.
+T2 - T1 = turnaround time
+
+* Waiting time - time proc spends in ready queue. 
+
+* Response time.
+
+T1 = time job submitted.
+T2 = time first character of results appears on output source. 
+T2 - T1 = response time.
+
+Decreasing these three is also the goal of a CPUMS.
+
+### Prediction of CPU burst time
+t(n+1) = a(t_n) + (1 - a)t_n
+
+As time → infinity, accuracy increases (per job).
+
+### Scheduling algorithms 
+**First come first served** (FCFS), **shortest job first**. To calculate waiting time, subtract CPU burst from finish time.
+
+**Priority algorithm** - artificial priority given to job. (Shortest job first could be considered priority algorithm, priority being based on CPU burst time.)
+
+Problem: chance exists that larger/lower-priority jobs never get executed. A job is said to be *starved* if it never gets executed.
+
+Solution: aging. If a job sits around for some amount of time, priority is increased. Keeps happening until job gets to the point where it's executed.
+
+**Round-robin** - time slice ("quantum" time), predefined time assigned to every proc. When time is up, CPU moves on. 
+
+**Pre-emptive** - pre-emptive versions of both shortest job first and round robin algorithms exist. 
+
+    * Pre-emptive shortest job first - Any tim ea new job arrives, remaining CPU burst of current job is compared to new job. Whichever CPU burst is less is executed. *CPU burst* based.
+
+    * Pre-emptive round-robin - at any given time, if remaining time slice is larger than CPU burst of new job, swap to new job. Jobs that get "kicked" go to bottom of ready queue. Time slice resets when a new job comes in. *Order & CPU time slice* based.
+
+
+2015.09.29
+==========
+
+### More scheduling algorithms
+**Multi-level queues** - ready queue divided into several queues:
+    - system jobs
+    - interactive jobs
+    - batch jobs
+
+On arrival in ready queue, job goes to its respective queue. Each queue has its own scheduling algorithm. CPU does jos in highest-priority queue first; after empty, it moves on.
+
+**Multi-level feedback queues** - again, several queues. Difference: no classes. All jobs go to first queue regardless of type. Job can be finished and exit queues, or be pushed to next-priority queue. When top queue is empty, next queue will be worked on. Handles starvation issue multi-level queue might encounter by promoting procs based on age. 
+
+How do we evaluate performance of these seven algorithms?
+
+Algorithm evaluation
+--------------------
+Criteria:
+
+- maximize CPU time under constraint that response time is 1 second. (for example) 90% CPU time used in 1s. (defined percentage)
+- maximize throughput such that turnaround time on average linearly proportional to total exec time. (*exec time* = CPU burst time for proc)
+
+Four ways to evaluate:
+
+**Analytic approach** - easiest. Ex: deterministic analysis. Pick a load using static data. Calculate an index based on turnaround time. (or other criteria) for each algo.
+    - Problem: static data doesn't represent dynamicity of system. 
+    - Advantage: simple, straightforward.
+
+**Queueing models** - uses dynamic data; actual data. Uses distribution of CPU & I/O bursts, using real data collected about system over time. Calculate probability of a particular CPU burst. Probability for CPU burst of x = (frequency of x)/(total frequency)
+
+If we assume arrival rate, L, waiting time, w, n = Lw - n = jobs at any given time in the queue. 
+
+**? Steady state**
+
+**Simulation** - build a prototype of a system, feed it artificial data.
+    - Problem: can't determine the order of job execution.
+
+**Implementation** - algos on a real system. Actually trial different algorithms. 
+    - Problem: takes ages, may make users angry.
+
+### Multi-processor scheduling
+- gives CPUs separate ready queues, schedulers; ignores advantages of multi-CPU system.
+- shared ready queue, self-scheduling. Issues with several CPUs selecting same job, job being lost.
+- shared ready queue + common scheduler, scheduler stays with master CPU & uses shared ready queue.
+
+### Real-time system scheduling
+On hard RTS, time needed to complete is calculated and schedules accordingly. On soft RTS, critical procs are prioritized. We know what services are needed for hard RTS, take max time and sum. If time needed less than time promised, we're ok. If not, scheduler refuses job.
+
+Soft RTS must have priority scheduling capability. Highest priority to critical processes; no degradation of priority of critical jobs; small dispatch latency
+
+*Dispatch latency* - context switching, switching to user mode, jumping to proper location. Must be small due to preemptive algorithm. System calls must be pre-emptive. 
+
+Save points in system call. At these points, short term scheduler checks for critical jobs. Must be interruptible. 
+
+Entire kernel pre-emptible. Critical proc may or may not need to read or modify kernel data. 
+
+If it doesn't need to:
+- pre-empt proc in kernel
+- force-release resources needed by critical proc
+- context switc from current proc to the critical proc
+
+If it does need to:
+- increasing priority of low-level priority procs (*priority inversion*) (one proc)
+- *priority inheritance* protocol (chain of procs)
+
+
