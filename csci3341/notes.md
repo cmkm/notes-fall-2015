@@ -559,9 +559,9 @@ Solution: aging. If a job sits around for some amount of time, priority is incre
 
 **Pre-emptive** - pre-emptive versions of both shortest job first and round robin algorithms exist. 
 
-    * Pre-emptive shortest job first - Any tim ea new job arrives, remaining CPU burst of current job is compared to new job. Whichever CPU burst is less is executed. *CPU burst* based.
+    - Pre-emptive shortest job first - Any tim ea new job arrives, remaining CPU burst of current job is compared to new job. Whichever CPU burst is less is executed. *CPU burst* based.
 
-    * Pre-emptive round-robin - at any given time, if remaining time slice is larger than CPU burst of new job, swap to new job. Jobs that get "kicked" go to bottom of ready queue. Time slice resets when a new job comes in. *Order & CPU time slice* based.
+    - Pre-emptive round-robin - at any given time, if remaining time slice is larger than CPU burst of new job, swap to new job. Jobs that get "kicked" go to bottom of ready queue. Time slice resets when a new job comes in. *Order & CPU time slice* based.
 
 
 2015.09.29
